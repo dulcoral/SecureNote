@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SecureNote</string>
+    <string name="ellipsis">…</string>
+    <string name="edit_description">"Edit Note</string>
+    <string name="delete_description">Delete Note</string>
+    <string name="add_note_description">Add Note</string>
+    <string name="my_notes">My Notes</string>
+
+
 </resources>
