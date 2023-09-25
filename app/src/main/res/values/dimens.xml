@@ -7,4 +7,8 @@
     <dimen name="size_xbig">24dp</dimen>
     <dimen name="size_huge">32dp</dimen>
 
+
+    <dimen name="icon_empty_view_size">100dp</dimen>
+
+
 </resources>

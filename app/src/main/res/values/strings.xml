@@ -5,6 +5,9 @@
     <string name="delete_description">Delete Note</string>
     <string name="add_note_description">Add Note</string>
     <string name="my_notes">My Notes</string>
+    <string name="empty_icon_description">Empty icon</string>
+    <string name="empty_view_title">No notes found</string>
+    <string name="empty_view_subtitle">Start by adding your first note!</string>
 
 
 </resources>

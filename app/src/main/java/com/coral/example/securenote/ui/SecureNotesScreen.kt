@@ -14,20 +14,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.coral.example.securenote.R
 import com.coral.example.securenote.ui.components.AddNoteButton
+import com.coral.example.securenote.ui.components.EmptyNotesView
 import com.coral.example.securenote.ui.components.NoteCardItem
 import com.coral.example.securenote.ui.models.NoteItem
 
-@Preview
 @Composable
 fun SecureNotesScreen() {
     Scaffold(
         floatingActionButton = { AddNoteButton(onButtonClick = { }) }
     ) {
-        NotesListView(listOf(NoteItem("My first note", "Hi, this is a note!", {}, {})))
+        NotesListView(listOf())
     }
 
 }
@@ -48,7 +47,7 @@ fun NotesListView(notes: List<NoteItem>) {
         LazyColumn(content = {
             if (notes.isEmpty()) {
                 item {
-                    Text(text = "There are no saved notes")
+                    EmptyNotesView()
                 }
             } else {
                 items(notes) { NoteCardItem(it) }
