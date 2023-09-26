@@ -26,13 +26,13 @@ fun SecureNotesScreen() {
     Scaffold(
         floatingActionButton = { AddNoteButton(onButtonClick = { }) }
     ) {
-        NotesListView(listOf())
+        NotesListView(listOf(),{},{})
     }
 
 }
 
 @Composable
-fun NotesListView(notes: List<NoteItem>) {
+fun NotesListView(notes: List<NoteItem>, onEdit: () -> Unit, onDelete: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,7 +50,7 @@ fun NotesListView(notes: List<NoteItem>) {
                     EmptyNotesView()
                 }
             } else {
-                items(notes) { NoteCardItem(it) }
+                items(notes) { NoteCardItem(it, onEdit, onDelete) }
             }
         })
     }

@@ -26,7 +26,7 @@ import com.coral.example.securenote.ui.models.NoteItem
 import com.coral.example.securenote.R
 
 @Composable
-fun NoteCardItem(note: NoteItem) {
+fun NoteCardItem(note: NoteItem, onEdit: () -> Unit, onDelete: () -> Unit) {
     val gradientStartColor = colorResource(R.color.light_yellow)
     val gradientEndColor = colorResource(R.color.strong_yellow)
 
@@ -64,13 +64,13 @@ fun NoteCardItem(note: NoteItem) {
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_xsmall))
             )
-            ActionsRow(note)
+            ActionsRow(onEdit, onDelete)
         }
     }
 }
 
 @Composable
-fun ActionsRow(note: NoteItem) {
+fun ActionsRow(onEdit: () -> Unit, onDelete: () -> Unit) {
     Row(
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.End,
@@ -78,13 +78,13 @@ fun ActionsRow(note: NoteItem) {
             .fillMaxWidth()
             .padding(top = dimensionResource(R.dimen.size_xsmall))
     ) {
-        IconButton(onClick = { note.onEdit() }) {
+        IconButton(onClick = { onEdit }) {
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = stringResource(R.string.edit_description)
             )
         }
-        IconButton(onClick = { note.onDelete() }) {
+        IconButton(onClick = { onDelete() }) {
             Icon(
                 imageVector = Icons.Default.Delete,
                 contentDescription = stringResource(R.string.delete_description)
