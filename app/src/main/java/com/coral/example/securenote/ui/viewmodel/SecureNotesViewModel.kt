@@ -73,7 +73,7 @@ class SecureNotesViewModel @Inject constructor(
         _noteMessage.value = message
     }
 
-    private fun clearNoteFields() {
+    fun clearNoteFields() {
         _noteTitle.value = ""
         _noteMessage.value = ""
         _note.value = NoteItem(title = "", message = "")

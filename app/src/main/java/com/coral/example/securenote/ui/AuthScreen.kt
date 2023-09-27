@@ -1,6 +1,5 @@
 package com.coral.example.securenote.ui
 
-import androidx.biometric.BiometricManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +45,7 @@ fun AuthScreen(onSuccessAuth: () -> Unit) {
                 fontWeight = FontWeight.Bold
             )
             Button(onClick = { showPrompt.value = true }) {
-                Text("Authenticate with Biometrics")
+                Text(stringResource(R.string.biometric_button))
             }
 
             if (showPrompt.value) {

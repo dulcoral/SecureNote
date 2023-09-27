@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.coral.example.securenote.R
-import com.coral.example.securenote.ui.components.AddNoteButton
 import com.coral.example.securenote.ui.components.EmptyNotesView
 import com.coral.example.securenote.ui.components.NoteCardItem
 import com.coral.example.securenote.ui.models.NoteItem

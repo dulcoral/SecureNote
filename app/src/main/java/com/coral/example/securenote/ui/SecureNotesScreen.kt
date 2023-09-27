@@ -4,19 +4,15 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.FabPosition
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,6 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.coral.example.securenote.R
 import com.coral.example.securenote.ui.components.AddNoteButton
+import com.coral.example.securenote.ui.components.AppBar
 import com.coral.example.securenote.ui.viewmodel.SecureNotesViewModel
 
 enum class SecureNoteScreen(@StringRes val title: Int) {
@@ -31,29 +28,6 @@ enum class SecureNoteScreen(@StringRes val title: Int) {
     AddNote(title = R.string.add_note_screen_name),
     EditNote(title = R.string.edit_note_screen_name),
     AuthNote(title = R.string.auth_note_screen_name),
-}
-
-@Composable
-fun AppBar(
-    currentScreen: SecureNoteScreen,
-    canNavigateBack: Boolean,
-    navigateUp: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    TopAppBar(
-        title = { Text(stringResource(currentScreen.title)) },
-        modifier = modifier,
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back_button)
-                    )
-                }
-            }
-        }
-    )
 }
 
 @Composable
@@ -67,6 +41,21 @@ fun SecureNotesScreen(
     )
     val list = viewModel.listNotes.collectAsState(initial = emptyList()).value
 
+    DisposableEffect(navController) {
+        val callback =
+            NavController.OnDestinationChangedListener { controller, destination, arguments ->
+
+                if (destination.route != SecureNoteScreen.EditNote.name) {
+                    viewModel.clearNoteFields()
+                }
+            }
+
+        navController.addOnDestinationChangedListener(callback)
+
+        onDispose {
+            navController.removeOnDestinationChangedListener(callback)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -83,8 +72,8 @@ fun SecureNotesScreen(
                     navController.navigate(SecureNoteScreen.AddNote.name)
                 })
             }
-        }
-
+        },
+        floatingActionButtonPosition = FabPosition.Center,
     ) { innerPadding ->
         NavHost(
             navController = navController,
