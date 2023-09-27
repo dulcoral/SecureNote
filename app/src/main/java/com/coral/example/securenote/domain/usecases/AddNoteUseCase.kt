@@ -5,6 +5,5 @@ import com.coral.example.securenote.ui.models.NoteItem
 import javax.inject.Inject
 
 class AddNoteUseCase @Inject constructor(private val repository: IRepository) {
-
-    fun invoke(note: NoteItem) = repository.addNote(note)
+    suspend fun invoke(note: NoteItem) = repository.addNote(note)
 }

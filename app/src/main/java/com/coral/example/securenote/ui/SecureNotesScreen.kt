@@ -1,57 +1,106 @@
 package com.coral.example.securenote.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.coral.example.securenote.R
-import com.coral.example.securenote.ui.components.AddNoteButton
-import com.coral.example.securenote.ui.components.EmptyNotesView
-import com.coral.example.securenote.ui.components.NoteCardItem
-import com.coral.example.securenote.ui.models.NoteItem
+import com.coral.example.securenote.ui.viewmodel.SecureNotesViewModel
 
-@Composable
-fun SecureNotesScreen() {
-    Scaffold(
-        floatingActionButton = { AddNoteButton(onButtonClick = { }) }
-    ) {
-        NotesListView(listOf(),{},{})
-    }
-
+enum class SecureNoteScreen(@StringRes val title: Int) {
+    Home(title = R.string.home_screen_name),
+    AddNote(title = R.string.add_note_screen_name),
 }
 
 @Composable
-fun NotesListView(notes: List<NoteItem>, onEdit: () -> Unit, onDelete: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.size_medium))
-    ) {
-        Text(
-            text = stringResource(R.string.my_notes),
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.size_xbig)))
-        LazyColumn(content = {
-            if (notes.isEmpty()) {
-                item {
-                    EmptyNotesView()
+fun AppBar(
+    currentScreen: SecureNoteScreen,
+    canNavigateBack: Boolean,
+    navigateUp: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    TopAppBar(
+        title = { Text(stringResource(currentScreen.title)) },
+        modifier = modifier,
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back_button)
+                    )
                 }
-            } else {
-                items(notes) { NoteCardItem(it, onEdit, onDelete) }
             }
-        })
+        }
+    )
+}
+
+@Composable
+fun SecureNotesScreen(
+    viewModel: SecureNotesViewModel = hiltViewModel(),
+    navController: NavHostController = rememberNavController()
+) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = SecureNoteScreen.valueOf(
+        backStackEntry?.destination?.route ?: SecureNoteScreen.Home.name
+    )
+
+    Scaffold(
+        topBar = {
+            AppBar(
+                currentScreen = currentScreen,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() }
+            )
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = SecureNoteScreen.Home.name,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(route = SecureNoteScreen.Home.name) {
+                HomeScreen(
+                    notes = listOf(),
+                    onAddNote = {
+                        navController.navigate(SecureNoteScreen.AddNote.name)
+
+                    },
+                    onEdit = {},
+                    onDelete = {},
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            composable(route = SecureNoteScreen.AddNote.name) {
+                AddNoteScreen(
+                    viewModel = viewModel,
+                    onSaveClick = {
+                        navController.popBackStack(
+                            SecureNoteScreen.Home.name,
+                            inclusive = false
+                        )
+                    },
+                    modifier = Modifier.fillMaxHeight()
+                )
+            }
+        }
     }
 }
+
