@@ -6,6 +6,7 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.coral.example.securenote.R
 
 class BiometricAuthenticator(private val context: FragmentActivity) {
 
@@ -13,9 +14,9 @@ class BiometricAuthenticator(private val context: FragmentActivity) {
 
     private val promptInfo = BiometricPrompt.PromptInfo.Builder()
         .setAllowedAuthenticators(BIOMETRIC_STRONG)
-        .setTitle("Biometric Authentication")
-        .setSubtitle("Log in using your biometric credential")
-        .setNegativeButtonText("Cancel")
+        .setTitle(context.getString(R.string.biometric_promp_title))
+        .setSubtitle(context.getString(R.string.biometric_promp_subtitle))
+        .setNegativeButtonText(context.getString(R.string.cancel_button))
         .build()
 
     fun authenticate(

@@ -17,7 +17,7 @@ fun BiometricPrompt(
     val viewModel = BiometricViewModel()
     val authenticationState by viewModel.authenticationState.observeAsState()
 
-    if (!promptShown.value) {
+    if (promptShown.value) {
         when (authenticationState) {
             is BiometricViewModel.AuthenticationState.Success -> {
                 onSuccessAuth()
@@ -26,21 +26,22 @@ fun BiometricPrompt(
 
             is BiometricViewModel.AuthenticationState.Failure -> {
                 // Handle failure
-                promptShown.value = true
+                viewModel.resetState()
             }
 
             is BiometricViewModel.AuthenticationState.Error -> {
                 val error = authenticationState as BiometricViewModel.AuthenticationState.Error
                 // Handle error using error.errorCode and error.errorMessage
-                promptShown.value = true
+                promptShown.value = false
+
             }
 
             is BiometricViewModel.AuthenticationState.NotAvailable -> {
                 // Handle not available state
-                promptShown.value = true
+                promptShown.value = false
             }
 
-            null -> viewModel.authenticate(context)
+            BiometricViewModel.AuthenticationState.Idle -> viewModel.authenticate(context)
         }
     }
 }

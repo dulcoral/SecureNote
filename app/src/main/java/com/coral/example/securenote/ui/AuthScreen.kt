@@ -27,8 +27,7 @@ import com.coral.example.securenote.ui.components.BiometricPrompt
 
 @Composable
 fun AuthScreen(onSuccessAuth: () -> Unit) {
-    val showPrompt = remember { mutableStateOf(false) }
-
+    val showPrompt = remember { mutableStateOf(true) }
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
@@ -47,16 +46,15 @@ fun AuthScreen(onSuccessAuth: () -> Unit) {
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
-            Button(onClick = { showPrompt.value = false }) {
+            Button(onClick = { showPrompt.value = true }) {
                 Text("Authenticate with Biometrics")
             }
 
-            if (!showPrompt.value) {
+            if (showPrompt.value) {
                 BiometricPrompt(
                     promptShown = showPrompt,
                     onSuccessAuth = {
                         onSuccessAuth()
-                        showPrompt.value = false
                     }
                 )
             }

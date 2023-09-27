@@ -10,7 +10,8 @@ import androidx.lifecycle.ViewModel
 import com.coral.example.securenote.utils.BiometricAuthenticator
 
 class BiometricViewModel : ViewModel() {
-    private val _authenticationState = MutableLiveData<AuthenticationState>()
+    private val _authenticationState =
+        MutableLiveData<AuthenticationState>(AuthenticationState.Idle)
     val authenticationState: LiveData<AuthenticationState> get() = _authenticationState
 
     fun authenticate(context: Context) {
@@ -34,7 +35,12 @@ class BiometricViewModel : ViewModel() {
         }
     }
 
+    fun resetState() {
+        _authenticationState.value = AuthenticationState.Idle
+    }
+
     sealed class AuthenticationState {
+        object Idle : AuthenticationState()
         object Success : AuthenticationState()
         object Failure : AuthenticationState()
         data class Error(val errorCode: Int, val errorMessage: String) : AuthenticationState()

@@ -30,7 +30,7 @@ enum class SecureNoteScreen(@StringRes val title: Int) {
     Home(title = R.string.home_screen_name),
     AddNote(title = R.string.add_note_screen_name),
     EditNote(title = R.string.edit_note_screen_name),
-    AuthNote(title = R.string.edit_note_screen_name),
+    AuthNote(title = R.string.auth_note_screen_name),
 }
 
 @Composable
