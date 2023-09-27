@@ -30,6 +30,7 @@ enum class SecureNoteScreen(@StringRes val title: Int) {
     Home(title = R.string.home_screen_name),
     AddNote(title = R.string.add_note_screen_name),
     EditNote(title = R.string.edit_note_screen_name),
+    AuthNote(title = R.string.edit_note_screen_name),
 }
 
 @Composable
@@ -62,18 +63,19 @@ fun SecureNotesScreen(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = SecureNoteScreen.valueOf(
-        backStackEntry?.destination?.route ?: SecureNoteScreen.Home.name
+        backStackEntry?.destination?.route ?: SecureNoteScreen.AuthNote.name
     )
     val list = viewModel.listNotes.collectAsState(initial = emptyList()).value
 
 
     Scaffold(
         topBar = {
-            AppBar(
-                currentScreen = currentScreen,
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() }
-            )
+            if (currentScreen != SecureNoteScreen.AuthNote)
+                AppBar(
+                    currentScreen = currentScreen,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigateUp = { navController.navigateUp() }
+                )
         },
         floatingActionButton = {
             if (currentScreen == SecureNoteScreen.Home) {
@@ -86,9 +88,21 @@ fun SecureNotesScreen(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = SecureNoteScreen.Home.name,
+            startDestination = SecureNoteScreen.AuthNote.name,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(route = SecureNoteScreen.AuthNote.name) {
+                AuthScreen(
+                    onSuccessAuth = {
+                        navController.navigate(SecureNoteScreen.Home.name) {
+                            popUpTo(SecureNoteScreen.AuthNote.name) {
+                                inclusive = true
+                            }
+                        }
+
+                    },
+                )
+            }
             composable(route = SecureNoteScreen.Home.name) {
                 HomeScreen(
                     notes = list,

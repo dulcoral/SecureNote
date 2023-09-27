@@ -28,7 +28,7 @@ fun EmptyNotesView() {
                 imageVector = Icons.Default.AddCircle,
                 contentDescription = stringResource(R.string.empty_icon_description),
                 tint = Color.Gray,
-                modifier = Modifier.size(dimensionResource(R.dimen.icon_empty_view_size))
+                modifier = Modifier.size(dimensionResource(R.dimen.icon_size))
             )
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.size_medium)))
             Text(
@@ -40,7 +40,7 @@ fun EmptyNotesView() {
             Text(
                 text = stringResource(R.string.empty_view_subtitle),
                 fontSize = 16.sp,
-                color = Color.Gray.copy(alpha = 0.7f)
+                color = Color.Gray
             )
         }
     }

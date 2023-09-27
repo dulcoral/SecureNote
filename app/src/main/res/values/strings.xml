@@ -1,19 +1,26 @@
 <resources>
     <string name="app_name">SecureNote</string>
     <string name="ellipsis">…</string>
+
     <string name="edit_description">"Edit Note</string>
     <string name="delete_description">Delete Note</string>
     <string name="add_note_description">Add Note</string>
+    <string name="auth_description">Auth Face</string>
+
     <string name="my_notes">My Notes</string>
     <string name="empty_icon_description">Empty icon</string>
     <string name="empty_view_title">No notes found</string>
     <string name="empty_view_subtitle">Start by adding your first note!</string>
     <string name="home_screen_name">Home</string>
     <string name="add_note_screen_name">Add Note</string>
-    <string name="edit_note_screen_name">Edit Note</string>
+    <string name="edit_note_screen_name">Auth Note</string>
     <string name="back_button">Back Button Navigation</string>
 
     <string name="add_note_title_hint">Title of the note</string>
     <string name="add_note_message_hint">Write here your note</string>
     <string name="add_note_button">Save</string>
+
+    <string name="cancel_button">Cancel</string>
+    <string name="auth_required">Biometric authentication required</string>
+
 </resources>

@@ -8,7 +8,7 @@
     <dimen name="size_huge">32dp</dimen>
 
 
-    <dimen name="icon_empty_view_size">100dp</dimen>
+    <dimen name="icon_size">100dp</dimen>
 
 
 </resources>
