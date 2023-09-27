@@ -9,6 +9,7 @@ import com.coral.example.securenote.domain.usecases.EditNoteUseCase
 import com.coral.example.securenote.domain.usecases.GetAllNotesUseCase
 import com.coral.example.securenote.ui.models.NoteItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,13 +26,15 @@ class SecureNotesViewModel @Inject constructor(
     val noteTitle: String get() = _noteTitle.value
     val noteMessage: String get() = _noteMessage.value
 
+    private val _listNotes = getAllNotesUseCase.invoke()
+    val listNotes: Flow<List<NoteItem>> get() = _listNotes
+
+
     fun addNewNote() {
         viewModelScope.launch {
             addNoteUseCase.invoke(NoteItem(title = noteTitle, message = noteMessage))
             clearNoteFields()
-
         }
-
     }
 
     fun updateNoteTitle(title: String) {

@@ -48,8 +48,8 @@ fun NoteCardItem(note: NoteItem, onEdit: () -> Unit, onDelete: () -> Unit) {
             verticalArrangement = Arrangement.SpaceBetween
         ) {
 
-            val message = if (note.message.length > 40) {
-                note.message.substring(0, 40) + R.string.ellipsis
+            val message = if (note.message.length > 120) {
+                note.message.substring(0, 120) + stringResource(R.string.ellipsis)
             } else {
                 note.message
             }

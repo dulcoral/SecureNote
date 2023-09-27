@@ -12,6 +12,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -61,6 +62,8 @@ fun SecureNotesScreen(
     val currentScreen = SecureNoteScreen.valueOf(
         backStackEntry?.destination?.route ?: SecureNoteScreen.Home.name
     )
+    val list = viewModel.listNotes.collectAsState(initial = emptyList()).value
+
 
     Scaffold(
         topBar = {
@@ -78,7 +81,7 @@ fun SecureNotesScreen(
         ) {
             composable(route = SecureNoteScreen.Home.name) {
                 HomeScreen(
-                    notes = listOf(),
+                    notes = list,
                     onAddNote = {
                         navController.navigate(SecureNoteScreen.AddNote.name)
 
