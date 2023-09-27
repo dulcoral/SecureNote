@@ -29,11 +29,16 @@ class SecureNotesViewModel @Inject constructor(
     private val _listNotes = getAllNotesUseCase.invoke()
     val listNotes: Flow<List<NoteItem>> get() = _listNotes
 
-
     fun addNewNote() {
         viewModelScope.launch {
             addNoteUseCase.invoke(NoteItem(title = noteTitle, message = noteMessage))
             clearNoteFields()
+        }
+    }
+
+    fun deleteNote(id: String) {
+        viewModelScope.launch {
+            deleteNoteUseCase.invoke(id)
         }
     }
 

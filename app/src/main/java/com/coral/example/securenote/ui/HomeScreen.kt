@@ -19,12 +19,12 @@ import com.coral.example.securenote.ui.components.AddNoteButton
 import com.coral.example.securenote.ui.components.EmptyNotesView
 import com.coral.example.securenote.ui.components.NoteCardItem
 import com.coral.example.securenote.ui.models.NoteItem
+import com.coral.example.securenote.ui.viewmodel.SecureNotesViewModel
 
 @Composable
 fun HomeScreen(
     notes: List<NoteItem>,
-    onEdit: () -> Unit,
-    onDelete: () -> Unit,
+    viewModel: SecureNotesViewModel,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -44,7 +44,13 @@ fun HomeScreen(
                     EmptyNotesView()
                 }
             } else {
-                items(notes) { NoteCardItem(it, onEdit, onDelete) }
+                items(notes) { note ->
+                    NoteCardItem(
+                        note = note,
+                        onEdit = { },
+                        onDelete = { viewModel.deleteNote(note.id) }
+                    )
+                }
             }
         })
     }

@@ -24,9 +24,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.coral.example.securenote.ui.models.NoteItem
 import com.coral.example.securenote.R
+import com.coral.example.securenote.ui.viewmodel.SecureNotesViewModel
 
 @Composable
-fun NoteCardItem(note: NoteItem, onEdit: () -> Unit, onDelete: () -> Unit) {
+fun NoteCardItem(note: NoteItem, onEdit: () -> Unit, onDelete: (String) -> Unit) {
     val gradientStartColor = colorResource(R.color.light_yellow)
     val gradientEndColor = colorResource(R.color.strong_yellow)
 
@@ -64,7 +65,7 @@ fun NoteCardItem(note: NoteItem, onEdit: () -> Unit, onDelete: () -> Unit) {
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_xsmall))
             )
-            ActionsRow(onEdit, onDelete)
+            ActionsRow(onEdit, onDelete = { onDelete(note.id) })
         }
     }
 }

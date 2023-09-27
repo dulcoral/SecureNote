@@ -91,8 +91,7 @@ fun SecureNotesScreen(
             composable(route = SecureNoteScreen.Home.name) {
                 HomeScreen(
                     notes = list,
-                    onEdit = {},
-                    onDelete = {},
+                    viewModel = viewModel,
                     modifier = Modifier.fillMaxSize()
                 )
             }
