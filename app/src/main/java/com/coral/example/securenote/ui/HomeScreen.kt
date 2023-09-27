@@ -25,6 +25,7 @@ import com.coral.example.securenote.ui.viewmodel.SecureNotesViewModel
 fun HomeScreen(
     notes: List<NoteItem>,
     viewModel: SecureNotesViewModel,
+    onEdit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -47,7 +48,10 @@ fun HomeScreen(
                 items(notes) { note ->
                     NoteCardItem(
                         note = note,
-                        onEdit = { },
+                        onEdit = {
+                            viewModel.updateNote(note)
+                            onEdit()
+                        },
                         onDelete = { viewModel.deleteNote(note.id) }
                     )
                 }

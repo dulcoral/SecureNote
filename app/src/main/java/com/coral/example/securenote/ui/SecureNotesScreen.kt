@@ -29,6 +29,7 @@ import com.coral.example.securenote.ui.viewmodel.SecureNotesViewModel
 enum class SecureNoteScreen(@StringRes val title: Int) {
     Home(title = R.string.home_screen_name),
     AddNote(title = R.string.add_note_screen_name),
+    EditNote(title = R.string.edit_note_screen_name),
 }
 
 @Composable
@@ -92,6 +93,9 @@ fun SecureNotesScreen(
                 HomeScreen(
                     notes = list,
                     viewModel = viewModel,
+                    onEdit = {
+                        navController.navigate(SecureNoteScreen.EditNote.name)
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -99,6 +103,20 @@ fun SecureNotesScreen(
                 AddNoteScreen(
                     viewModel = viewModel,
                     onSaveClick = {
+                        viewModel.saveNote(isEdit = false)
+                        navController.popBackStack(
+                            SecureNoteScreen.Home.name,
+                            inclusive = false
+                        )
+                    },
+                    modifier = Modifier.fillMaxHeight()
+                )
+            }
+            composable(route = SecureNoteScreen.EditNote.name) {
+                AddNoteScreen(
+                    viewModel = viewModel,
+                    onSaveClick = {
+                        viewModel.saveNote(isEdit = true)
                         navController.popBackStack(
                             SecureNoteScreen.Home.name,
                             inclusive = false

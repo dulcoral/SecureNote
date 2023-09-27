@@ -65,7 +65,7 @@ fun NoteCardItem(note: NoteItem, onEdit: () -> Unit, onDelete: (String) -> Unit)
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_xsmall))
             )
-            ActionsRow(onEdit, onDelete = { onDelete(note.id) })
+            ActionsRow(onEdit = { onEdit() }, onDelete = { onDelete(note.id) })
         }
     }
 }
@@ -79,7 +79,7 @@ fun ActionsRow(onEdit: () -> Unit, onDelete: () -> Unit) {
             .fillMaxWidth()
             .padding(top = dimensionResource(R.dimen.size_xsmall))
     ) {
-        IconButton(onClick = { onEdit }) {
+        IconButton(onClick = { onEdit() }) {
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = stringResource(R.string.edit_description)

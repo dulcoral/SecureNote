@@ -10,11 +10,10 @@
     <string name="empty_view_subtitle">Start by adding your first note!</string>
     <string name="home_screen_name">Home</string>
     <string name="add_note_screen_name">Add Note</string>
+    <string name="edit_note_screen_name">Edit Note</string>
     <string name="back_button">Back Button Navigation</string>
 
     <string name="add_note_title_hint">Title of the note</string>
     <string name="add_note_message_hint">Write here your note</string>
     <string name="add_note_button">Save</string>
-
-
 </resources>

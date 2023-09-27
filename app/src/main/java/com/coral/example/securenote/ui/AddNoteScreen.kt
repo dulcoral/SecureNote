@@ -12,6 +12,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.coral.example.securenote.R
+import com.coral.example.securenote.ui.models.NoteItem
 import com.coral.example.securenote.ui.viewmodel.SecureNotesViewModel
 import com.coral.example.securenote.utils.Utils.closeKeyboard
 
@@ -82,17 +84,13 @@ fun AddNoteScreen(
         )
 
         Button(
-            onClick = {
-                viewModel.addNewNote()
-                onSaveClick()
-            },
+            onClick = { onSaveClick() },
             shape = shapes.medium,
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(stringResource(R.string.add_note_button))
         }
     }
-
 }
 
 

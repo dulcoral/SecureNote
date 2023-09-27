@@ -20,7 +20,8 @@ class SecureNotesViewModel @Inject constructor(
     private val deleteNoteUseCase: DeleteNoteUseCase,
     private val editNoteUseCase: EditNoteUseCase,
 ) : ViewModel() {
-
+    private val _note = mutableStateOf(NoteItem(title = "", message = ""))
+    val note: NoteItem get() = _note.value
     private val _noteTitle = mutableStateOf("")
     private val _noteMessage = mutableStateOf("")
     val noteTitle: String get() = _noteTitle.value
@@ -29,9 +30,25 @@ class SecureNotesViewModel @Inject constructor(
     private val _listNotes = getAllNotesUseCase.invoke()
     val listNotes: Flow<List<NoteItem>> get() = _listNotes
 
-    fun addNewNote() {
+
+    fun saveNote(isEdit: Boolean) {
+        if (isEdit) {
+            editNote(NoteItem(id = note.id, title = noteTitle, message = noteMessage))
+        } else {
+            addNewNote()
+        }
+    }
+
+    private fun addNewNote() {
         viewModelScope.launch {
             addNoteUseCase.invoke(NoteItem(title = noteTitle, message = noteMessage))
+            clearNoteFields()
+        }
+    }
+
+    private fun editNote(note: NoteItem) {
+        viewModelScope.launch {
+            editNoteUseCase.invoke(note)
             clearNoteFields()
         }
     }
@@ -40,6 +57,12 @@ class SecureNotesViewModel @Inject constructor(
         viewModelScope.launch {
             deleteNoteUseCase.invoke(id)
         }
+    }
+
+    fun updateNote(note: NoteItem) {
+        _note.value = note
+        _noteTitle.value = note.title
+        _noteMessage.value = note.message
     }
 
     fun updateNoteTitle(title: String) {
@@ -53,5 +76,6 @@ class SecureNotesViewModel @Inject constructor(
     private fun clearNoteFields() {
         _noteTitle.value = ""
         _noteMessage.value = ""
+        _note.value = NoteItem(title = "", message = "")
     }
 }

@@ -10,6 +10,4 @@ interface IRepository {
     suspend fun deleteNote(id: String)
 
     fun getAllNotes(): Flow<List<NoteItem>>
-
-
 }

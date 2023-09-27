@@ -5,5 +5,5 @@ import com.coral.example.securenote.ui.models.NoteItem
 
 fun NoteItem.toDto(): NoteDTO {
     val item = this
-    return NoteDTO(title = item.title, message = item.message)
+    return NoteDTO(id = item.id, title = item.title, message = item.message)
 }
