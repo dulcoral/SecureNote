@@ -23,7 +23,6 @@ import com.coral.example.securenote.ui.models.NoteItem
 @Composable
 fun HomeScreen(
     notes: List<NoteItem>,
-    onAddNote: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
@@ -48,6 +47,5 @@ fun HomeScreen(
                 items(notes) { NoteCardItem(it, onEdit, onDelete) }
             }
         })
-        AddNoteButton(onButtonClick = { onAddNote() })
     }
 }

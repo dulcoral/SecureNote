@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.coral.example.securenote.R
+import com.coral.example.securenote.ui.components.AddNoteButton
 import com.coral.example.securenote.ui.viewmodel.SecureNotesViewModel
 
 enum class SecureNoteScreen(@StringRes val title: Int) {
@@ -72,7 +73,15 @@ fun SecureNotesScreen(
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() }
             )
+        },
+        floatingActionButton = {
+            if (currentScreen == SecureNoteScreen.Home) {
+                AddNoteButton(onButtonClick = {
+                    navController.navigate(SecureNoteScreen.AddNote.name)
+                })
+            }
         }
+
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -82,10 +91,6 @@ fun SecureNotesScreen(
             composable(route = SecureNoteScreen.Home.name) {
                 HomeScreen(
                     notes = list,
-                    onAddNote = {
-                        navController.navigate(SecureNoteScreen.AddNote.name)
-
-                    },
                     onEdit = {},
                     onDelete = {},
                     modifier = Modifier.fillMaxSize()
