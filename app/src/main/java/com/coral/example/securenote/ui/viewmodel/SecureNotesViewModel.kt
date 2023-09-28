@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SecureNotesViewModel @Inject constructor(
-    private val getAllNotesUseCase: GetAllNotesUseCase,
+    getAllNotesUseCase: GetAllNotesUseCase,
     private val addNoteUseCase: AddNoteUseCase,
     private val deleteNoteUseCase: DeleteNoteUseCase,
     private val editNoteUseCase: EditNoteUseCase,
