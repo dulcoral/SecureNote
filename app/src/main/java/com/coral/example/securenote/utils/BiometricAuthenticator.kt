@@ -1,51 +1,79 @@
 package com.coral.example.securenote.utils
 
+import android.Manifest
+import android.app.KeyguardManager
+import android.content.Context
+import android.content.pm.PackageManager
+import android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import android.hardware.biometrics.BiometricPrompt
 import android.os.Build
+import android.os.CancellationSignal
 import androidx.annotation.RequiresApi
-import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
-import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
+import androidx.core.app.ActivityCompat
 import com.coral.example.securenote.R
 
-class BiometricAuthenticator(private val context: FragmentActivity) {
+@RequiresApi(Build.VERSION_CODES.R)
+fun showBiometricPrompt(
+    context: Context,
+    onAuthenticateSuccess: () -> Unit,
+    onAuthenticateError: () -> Unit
+) {
+    if (isBiometricSupported(context)) {
+        val biometricPrompt = createBiometricPrompt(context, onAuthenticateError)
+        val cancellationSignal = CancellationSignal()
 
-    private val executor = ContextCompat.getMainExecutor(context)
+        biometricPrompt.authenticate(
+            cancellationSignal,
+            context.mainExecutor,
+            getAuthenticationCallback(onAuthenticateSuccess, onAuthenticateError)
+        )
+    }
+}
 
-    private val promptInfo = BiometricPrompt.PromptInfo.Builder()
+
+@RequiresApi(Build.VERSION_CODES.M)
+private fun isBiometricSupported(context: Context): Boolean {
+    val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+
+    if (!keyguardManager.isDeviceSecure) return false
+
+    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_BIOMETRIC)
+        != PackageManager.PERMISSION_GRANTED
+    ) return false
+
+    return context.packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)
+}
+
+@RequiresApi(Build.VERSION_CODES.R)
+private fun createBiometricPrompt(
+    context: Context, onAuthenticateError: () -> Unit
+): BiometricPrompt {
+    return BiometricPrompt.Builder(context)
         .setAllowedAuthenticators(BIOMETRIC_STRONG)
         .setTitle(context.getString(R.string.biometric_promp_title))
         .setSubtitle(context.getString(R.string.biometric_promp_subtitle))
-        .setNegativeButtonText(context.getString(R.string.cancel_button))
+        .setConfirmationRequired(false)
+        .setNegativeButton(
+            context.getString(R.string.cancel_button),
+            context.mainExecutor
+        ) { _, _ -> onAuthenticateError() }
         .build()
+}
 
-    fun authenticate(
-        onSuccess: () -> Unit,
-        onFailure: () -> Unit,
-        onError: (Int, CharSequence) -> Unit
-    ) {
-        val biometricPrompt = BiometricPrompt(
-            context,
-            executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    super.onAuthenticationError(errorCode, errString)
-                    onError(errorCode, errString)
-                }
+@RequiresApi(Build.VERSION_CODES.P)
+private fun getAuthenticationCallback(
+    onAuthenticateSuccess: () -> Unit,
+    onAuthenticateError: () -> Unit
+): BiometricPrompt.AuthenticationCallback {
+    return object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+            super.onAuthenticationError(errorCode, errString)
+            onAuthenticateError()
+        }
 
-                @RequiresApi(Build.VERSION_CODES.R)
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    super.onAuthenticationSucceeded(result)
-                    onSuccess()
-                }
-
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                    onFailure()
-                }
-            }
-        )
-
-        biometricPrompt.authenticate(promptInfo)
+        override fun onAuthenticationSucceeded(result: android.hardware.biometrics.BiometricPrompt.AuthenticationResult?) {
+            super.onAuthenticationSucceeded(result)
+            onAuthenticateSuccess()
+        }
     }
 }

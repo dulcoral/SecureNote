@@ -1,37 +1,32 @@
 package com.coral.example.securenote.ui.viewmodel
 
 import android.content.Context
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
-import androidx.fragment.app.FragmentActivity
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.coral.example.securenote.utils.BiometricAuthenticator
+import androidx.lifecycle.viewModelScope
+import com.coral.example.securenote.utils.showBiometricPrompt
+import kotlinx.coroutines.launch
 
 class BiometricViewModel : ViewModel() {
     private val _authenticationState =
         MutableLiveData<AuthenticationState>(AuthenticationState.Idle)
     val authenticationState: LiveData<AuthenticationState> get() = _authenticationState
 
+    @RequiresApi(Build.VERSION_CODES.R)
     fun authenticate(context: Context) {
-        val biometricManager = BiometricManager.from(context)
-        if (biometricManager.canAuthenticate(BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
-            val authenticator = BiometricAuthenticator(context as FragmentActivity)
-            authenticator.authenticate(
-                onSuccess = {
+        viewModelScope.launch {
+            showBiometricPrompt(
+                onAuthenticateSuccess = {
                     _authenticationState.value = AuthenticationState.Success
                 },
-                onFailure = {
+                onAuthenticateError = {
                     _authenticationState.value = AuthenticationState.Failure
                 },
-                onError = { errorCode, errString ->
-                    _authenticationState.value =
-                        AuthenticationState.Error(errorCode, errString.toString())
-                }
+                context = context
             )
-        } else {
-            _authenticationState.value = AuthenticationState.NotAvailable
         }
     }
 
@@ -43,7 +38,5 @@ class BiometricViewModel : ViewModel() {
         object Idle : AuthenticationState()
         object Success : AuthenticationState()
         object Failure : AuthenticationState()
-        data class Error(val errorCode: Int, val errorMessage: String) : AuthenticationState()
-        object NotAvailable : AuthenticationState()
     }
 }

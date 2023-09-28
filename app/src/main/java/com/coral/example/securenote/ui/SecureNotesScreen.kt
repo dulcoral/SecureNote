@@ -1,5 +1,7 @@
 package com.coral.example.securenote.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +32,7 @@ enum class SecureNoteScreen(@StringRes val title: Int) {
     AuthNote(title = R.string.auth_note_screen_name),
 }
 
+@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun SecureNotesScreen(
     viewModel: SecureNotesViewModel = hiltViewModel(),

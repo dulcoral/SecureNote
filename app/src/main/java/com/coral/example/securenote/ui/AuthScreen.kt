@@ -1,5 +1,7 @@
 package com.coral.example.securenote.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,9 +25,10 @@ import androidx.compose.ui.unit.sp
 import com.coral.example.securenote.R
 import com.coral.example.securenote.ui.components.BiometricPrompt
 
+@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun AuthScreen(onSuccessAuth: () -> Unit) {
-    val showPrompt = remember { mutableStateOf(true) }
+    val showPrompt = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
@@ -44,11 +47,11 @@ fun AuthScreen(onSuccessAuth: () -> Unit) {
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
-            Button(onClick = { showPrompt.value = true }) {
+            Button(onClick = { showPrompt.value = false }) {
                 Text(stringResource(R.string.biometric_button))
             }
 
-            if (showPrompt.value) {
+            if (!showPrompt.value) {
                 BiometricPrompt(
                     promptShown = showPrompt,
                     onSuccessAuth = {
